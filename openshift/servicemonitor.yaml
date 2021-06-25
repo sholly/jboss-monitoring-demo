@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    k8s-app: prometheus-example-monitor
+  name: prometheus-example-monitor
+  namespace: jboss-monitoring-demo
+spec:
+  endpoints:
+  - interval: 30s
+    port: admin
+    scheme: http
+  selector:
+    matchLabels:
+      app: eap-xp2-basic-s2i-admin

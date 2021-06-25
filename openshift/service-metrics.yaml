@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+  labels:
+    app: eap-xp2-basic-s2i-admin
+    app.kubernetes.io/component: eap-xp2-basic-s2i-admin
+    app.kubernetes.io/instance: eap-xp2-basic-s2i-admin
+    application: eap-xp2-basic-app-admin
+    template: eap-xp2-basic-s2i-admin
+    xpaas: "1.0"
+  name: jboss-service-metrics
+  namespace: jboss-monitoring-demo
+spec:
+  ports:
+    - name: admin
+      port: 9990
+      protocol: TCP
+      targetPort: 9990
+  selector:
+    deploymentConfig: jboss-monitoring-demo
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
