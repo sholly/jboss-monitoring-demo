@@ -14,6 +14,8 @@ public class SayStuff {
     @Path("/saystuff")
     @Produces(MediaType.TEXT_PLAIN)
     public String sayStuff() {
+
+        System.out.println("In Say Stuff...");
         return "stuff";
     }
 }
