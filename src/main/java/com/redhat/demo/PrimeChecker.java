@@ -78,7 +78,7 @@ public class PrimeChecker {
 
     @GET
     @Path("/largememory")
-    public void largeMemory() throws InterruptedException {
+    public String largeMemory() throws InterruptedException {
         ArrayList<String> list = new ArrayList<>();
 
         for(int i = 0; i < 250000;  i++) {
@@ -87,6 +87,6 @@ public class PrimeChecker {
         System.out.println("In largeMemory");
 
         Thread.sleep(5);
-        return;
+        return "finished";
     }
 }
