@@ -80,13 +80,13 @@ public class PrimeChecker {
     @GET
     @Path("/largememory")
     public String largeMemory() throws InterruptedException {
-        
+
         for(int i = 0; i < 250000;  i++) {
             list.add("Just some sample text");
         }
         System.out.println("In largeMemory");
 
         Thread.sleep(5);
-        return "finished";
+        return "list size: " + list.size();
     }
 }
