@@ -1,6 +1,7 @@
 package com.redhat.demo;
 
 import org.eclipse.microprofile.metrics.annotation.Counted;
+import org.eclipse.microprofile.metrics.annotation.Timed;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.GET;
@@ -17,6 +18,7 @@ public class PrimeChecker {
     @Path("/prime/{number}")
     @Produces(MediaType.TEXT_PLAIN)
     @Counted(name = "checkPrimesCount")
+    @Timed(name= "checkPrimesTimer")
     public String checkPrime(@PathParam("number") long number) {
         System.out.println("checkPrime, number: " + number);
         if(number < 1) {
