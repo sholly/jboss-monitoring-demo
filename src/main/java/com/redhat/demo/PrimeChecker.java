@@ -1,24 +1,33 @@
 package com.redhat.demo;
 
-import org.eclipse.microprofile.metrics.annotation.Counted;
-import org.eclipse.microprofile.metrics.annotation.Timed;
+import org.eclipse.microprofile.metrics.Counter;
+import org.eclipse.microprofile.metrics.annotation.*;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.concurrent.CountDownLatch;
 
 @Path("/")
 @ApplicationScoped
 public class PrimeChecker {
+
+    private CountDownLatch countDownLatch = new CountDownLatch(1);
+
+    @Inject
+    @Metric(name = "injectedCounter", absolute = true)
+    private Counter injectedCounter;
 
     @GET
     @Path("/prime/{number}")
     @Produces(MediaType.TEXT_PLAIN)
     @Counted(name = "checkPrimesCount")
     @Timed(name = "checkPrimesTimer", absolute = true, description = "Timing primeCount")
+    @Metered(name = "checkPrimesFrequency", absolute = true)
     public String checkPrime(@PathParam("number") long number) {
         System.out.println("checkPrime, number: " + number);
         if (number < 1) {
@@ -43,4 +52,26 @@ public class PrimeChecker {
         return number + " is prime";
     }
 
+    @GET
+    @Path("/parallel")
+    @ConcurrentGauge(name = "parallelAccess", description = "Parallel accesses")
+    public void parallelAccess() throws InterruptedException {
+        countDownLatch.await();
+        System.out.println("parallelAccess");
+    }
+
+    @GET
+    @Path("/parallel-finish")
+    public void parallelFinish() {
+        System.out.println();
+        countDownLatch.countDown();
+    }
+
+    @GET
+    @Path("/injected-metric")
+    public String injectedMetric() {
+        injectedCounter.inc();
+        System.out.println("in injected metric");
+        return "injected metric";
+    }
 }
