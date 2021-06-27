@@ -7,7 +7,7 @@ Install the JBoss EAP Expansion Pack in the jboss-monitoring-demo namespace.
 Deploy the application: 
 ```
 oc new-app --template=eap-xp2-basic-s2i \
- -p APPLICATION_NAME=jboss-monitoring-demo \ 
+ -p APPLICATION_NAME=jboss-monitoring-demo \
  -p EAP_IMAGE_NAME=jboss-eap-xp2-openjdk11-openshift:2.0 \
  -p EAP_RUNTIME_IMAGE_NAME=jboss-eap-xp2-openjdk11-runtime-openshift:2.0 \
  -p IMAGE_STREAM_NAMESPACE=jboss-monitoring-demo \
@@ -70,3 +70,22 @@ endpoints:
 
 Apply the one in the openshift directory: 
 `oc apply -f openshift/servicemonitor.yaml`
+
+
+With everything set up, let's look at metrics: 
+
+`oc get route` gives us: 
+
+jboss-service-metrics-jboss-monitoring-demo.apps.ocp4.lab.unixnerd.org
+
+Check metrics: 
+
+`curl -H "Accept: application/json" jboss-service-metrics-jboss-monitoring-demo.apps.ocp4.lab.unixnerd.org/metrics/`
+
+This will give us base, vendor, and application. 
+
+Check application specific metrics: 
+`curl -H "Accept: application/json" jboss-service-metrics-jboss-monitoring-demo.apps.ocp4.lab.unixnerd.org/metrics/`
+
+
+

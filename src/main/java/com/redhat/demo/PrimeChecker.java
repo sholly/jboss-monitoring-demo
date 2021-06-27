@@ -86,7 +86,6 @@ public class PrimeChecker {
         }
         System.out.println("In largeMemory");
 
-        Thread.sleep(5);
         return "list size: " + list.size();
     }
 }
