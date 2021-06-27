@@ -18,25 +18,25 @@ public class PrimeChecker {
     @Path("/prime/{number}")
     @Produces(MediaType.TEXT_PLAIN)
     @Counted(name = "checkPrimesCount")
-    @Timed(name= "checkPrimesTimer")
+    @Timed(name = "checkPrimesTimer", absolute = true, description = "Timing primeCount")
     public String checkPrime(@PathParam("number") long number) {
         System.out.println("checkPrime, number: " + number);
-        if(number < 1) {
+        if (number < 1) {
             return "Number is not natural";
         }
-        if(number == 1) {
+        if (number == 1) {
             return "1 is not prime";
         }
-        if(number == 2) {
+        if (number == 2) {
             return "2 is prime";
         }
 
-        if(number %2 == 0) {
+        if (number % 2 == 0) {
             return number + " is not prime, divisible by 2";
         }
 
-        for(int i = 3; i < Math.floor(Math.sqrt(number)) + 1; i = i+2) {
-            if(number % i == 0) {
+        for (int i = 3; i < Math.floor(Math.sqrt(number)) + 1; i = i + 2) {
+            if (number % i == 0) {
                 return number + " is not prime, divisible by " + i;
             }
         }
