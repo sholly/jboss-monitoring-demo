@@ -63,7 +63,7 @@ public class PrimeChecker {
     @GET
     @Path("/parallel-finish")
     public void parallelFinish() {
-        System.out.println();
+        System.out.println("parallel-finish");
         countDownLatch.countDown();
     }
 
@@ -71,7 +71,7 @@ public class PrimeChecker {
     @Path("/injected-metric")
     public String injectedMetric() {
         injectedCounter.inc();
-        System.out.println("in injected metric");
+        System.out.println("injected metric");
         return "injected metric";
     }
 }
