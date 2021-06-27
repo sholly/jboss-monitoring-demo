@@ -10,6 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
 @Path("/")
@@ -73,5 +74,19 @@ public class PrimeChecker {
         injectedCounter.inc();
         System.out.println("injected metric");
         return "injected metric";
+    }
+
+    @GET
+    @Path("/largememory")
+    public void largeMemory() throws InterruptedException {
+        ArrayList<String> list = new ArrayList<>();
+
+        for(int i = 0; i < 250000;  i++) {
+            list.add("Just some sample text");
+        }
+        System.out.println("In largeMemory");
+
+        Thread.sleep(5);
+        return;
     }
 }

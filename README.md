@@ -49,3 +49,24 @@ status:
 
 expose metrics so we can get metrics externally: 
 oc expose svc/jboss-service-metrics --path=/metrics
+
+Finally, we need a ServiceMonitor:
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+labels:
+k8s-app: prometheus-example-monitor
+name: prometheus-example-monitor
+namespace: jboss-monitoring-demo
+spec:
+endpoints:
+- interval: 30s
+  port: admin
+  scheme: http
+  selector:
+  matchLabels:
+  app: eap-xp2-basic-s2i-admin
+
+
+Apply the one in the openshift directory: 
+`oc apply -f openshift/servicemonitor.yaml`
