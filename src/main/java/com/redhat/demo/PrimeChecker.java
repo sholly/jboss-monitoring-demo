@@ -18,6 +18,7 @@ import java.util.concurrent.CountDownLatch;
 public class PrimeChecker {
 
     private CountDownLatch countDownLatch = new CountDownLatch(1);
+    ArrayList<String> list = new ArrayList<>();
 
     @Inject
     @Metric(name = "injectedCounter", absolute = true)
@@ -79,8 +80,7 @@ public class PrimeChecker {
     @GET
     @Path("/largememory")
     public String largeMemory() throws InterruptedException {
-        ArrayList<String> list = new ArrayList<>();
-
+        
         for(int i = 0; i < 250000;  i++) {
             list.add("Just some sample text");
         }
