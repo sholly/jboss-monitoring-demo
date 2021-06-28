@@ -1,6 +1,7 @@
 package com.redhat.demo;
 
 import org.eclipse.microprofile.metrics.Counter;
+import org.eclipse.microprofile.metrics.MetricUnits;
 import org.eclipse.microprofile.metrics.annotation.*;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -17,6 +18,7 @@ import java.util.concurrent.CountDownLatch;
 @ApplicationScoped
 public class PrimeChecker {
 
+    private long highestPrimeSoFar = 2;
     private CountDownLatch countDownLatch = new CountDownLatch(1);
     ArrayList<String> list = new ArrayList<>();
 
@@ -51,7 +53,16 @@ public class PrimeChecker {
                 return number + " is not prime, divisible by " + i;
             }
         }
+
+        if(number > highestPrimeSoFar) {
+            highestPrimeSoFar = number;
+        }
         return number + " is prime";
+    }
+
+    @Gauge(name = "highestPrimeSoFar", unit = MetricUnits.NONE)
+    public long getHighestPrimeSoFar() {
+        return highestPrimeSoFar;
     }
 
     @GET
