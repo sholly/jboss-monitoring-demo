@@ -5,4 +5,4 @@ do
 done
 sleep 2
 curl -H "Accept: application/json" jboss-service-metrics-jboss-monitoring-demo.apps.ocp4.lab.unixnerd.org/metrics/application
-curl -k https://jboss-monitoring-demo-jboss-monitoring-demo.apps.ocp4.lab.unixnerd.org/jboss-monitoring-demo/parallel-finish
+#curl -k https://jboss-monitoring-demo-jboss-monitoring-demo.apps.ocp4.lab.unixnerd.org/jboss-monitoring-demo/parallel-finish
