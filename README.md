@@ -35,7 +35,7 @@ oc new-app --template=eap-xp2-basic-s2i \
 Verify successful build and running pods. 
 
 Create extra service to expose metrics: 
-
+```yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -61,12 +61,13 @@ spec:
   type: ClusterIP
 status:
   loadBalancer: {}
-
+```
 
 expose metrics so we can get metrics externally: 
 oc expose svc/jboss-service-metrics --path=/metrics
 
 Finally, we need a ServiceMonitor:
+```yaml
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
@@ -82,7 +83,7 @@ endpoints:
   selector:
   matchLabels:
   app: eap-xp2-basic-s2i-admin
-
+```
 
 Apply the one in the openshift directory: 
 `oc apply -f openshift/servicemonitor.yaml`
