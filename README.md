@@ -32,9 +32,9 @@ oc new-app --template=eap-xp2-basic-s2i \
 ```
 
 
-Verify successful build and running pods. 
+Verify that the build was successful, and the pods are running without issues.  
 
-Create extra service to expose metrics: 
+Create and expose an extra service to query metrics directly: 
 ```yaml
 apiVersion: v1
 kind: Service
@@ -63,10 +63,9 @@ status:
   loadBalancer: {}
 ```
 
-expose metrics so we can get metrics externally: 
-oc expose svc/jboss-service-metrics --path=/metrics
+`oc expose svc/jboss-service-metrics --path=/metrics`
 
-Finally, we need a ServiceMonitor:
+Finally, we need to create a ServiceMonitor so that metrics can be scraped from our application:
 ```yaml
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
@@ -85,10 +84,10 @@ endpoints:
   app: eap-xp2-basic-s2i-admin
 ```
 
-Apply the one in the openshift directory: 
+Apply the ServiceMonitor in the openshift directory: 
 `oc apply -f openshift/servicemonitor.yaml`
 
-
+## Checking Application metrics
 With everything set up, let's generate some traffic and look at metrics:
 
 ```shell
@@ -98,17 +97,21 @@ do
 done
 ```
 
-`oc get route` gives us: 
+`oc get route` gives us two routes, we want the extra route we exposed to pull metrics directly: 
 
 jboss-service-metrics-jboss-monitoring-demo.apps.ocp4.lab.unixnerd.org
 
-Check metrics: 
+Check the metrics: 
 
 `curl -H "Accept: application/json" jboss-service-metrics-jboss-monitoring-demo.apps.ocp4.lab.unixnerd.org/metrics/`
 
-This will give us base, vendor, and application. 
+There are three subcategories for metrics: 
 
-Check application specific metrics: 
+1. Base, which is the default set of metrics
+2. Vendor, which in this case are the JBOSS metrics. 
+3. Application, which will give us the custom metrics that we're exposing via annotations. 
+
+Check application specific metrics, for example: 
 `curl -H "Accept: application/json" jboss-service-metrics-jboss-monitoring-demo.apps.ocp4.lab.unixnerd.org/metrics/application`
 
 We should get a response like so: 
@@ -149,7 +152,7 @@ We should get a response like so:
 }
 ```
 Running the query to return plain text: 
-`curl   jboss-service-metrics-jboss-monitoring-demo.apps.ocp4.lab.unixnerd.org/metrics/application`
+`curl jboss-service-metrics-jboss-monitoring-demo.apps.ocp4.lab.unixnerd.org/metrics/application`
 
 Will give output similar to this: 
 
@@ -166,7 +169,7 @@ application_checkPrimesTimer_seconds{quantile="0.99"} 0.001870931
 application_checkPrimesTimer_seconds{quantile="0.999"} 0.002228662
 
 ```
-
+### Viewing application metrics in the Openshift Console: 
 Go to your openshift web console, choose the Developer view, then click monitoring.  Choose the 'jboss-monitoring-demo' 
 namespace, then choose the 'Metrics' tab. 
 
@@ -234,7 +237,7 @@ spec:
   name: prometheus-grafanadatasource.yaml
 ```
 
-We should now be able to log into our grafana instance and run queries. 
+We should now be able to log into our grafana instance, run queries, and create custom dashboards. 
 
 
 
